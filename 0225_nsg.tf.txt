@@ -1,0 +1,18 @@
+resource "azurerm_network_security_group" "team63_nsg_http2" {
+  name                = "team63-nsg-http2"
+  location            = var.rgloca2
+  resource_group_name = var.rgname2
+
+  security_rule {
+    name                       = "http"
+    priority                   = 200
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_ranges    = ["22", "80", "3306"]
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+  depends_on = [azurerm_resource_group.team603_snort_south]
+}

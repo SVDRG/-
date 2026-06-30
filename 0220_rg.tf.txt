@@ -1,0 +1,4 @@
+resource "azurerm_resource_group" "team603_snort_south" {
+  name     = "team603-snort-south"
+  location = "KoreaSouth"
+}

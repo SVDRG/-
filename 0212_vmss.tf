@@ -1,0 +1,85 @@
+resource "azurerm_linux_virtual_machine_scale_set" "team63_vmss" {
+  name                = "team63-vmss"
+  location            = var.rgloca
+  resource_group_name = var.rgname
+  instances           = 2
+  source_image_id     = azurerm_shared_image_version.team63_version.id
+  admin_username      = "team63"
+  sku                 = "Standard_B2ls_v2"
+  upgrade_mode        = "Manual"
+  user_data           = base64encode(replace(file("install.sh"), "$${db_pswd}", var.db_pswd))
+
+  plan {
+    publisher = "resf"
+    product   = "rockylinux-x86_64"
+    name      = "9-lvm"
+  }
+
+  admin_ssh_key {
+    username   = "team63"
+    public_key = file("id_rsa.pub")
+  }
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "StandardSSD_LRS"
+  }
+
+  network_interface {
+    name    = "team63-vmssnic"
+    primary = true
+
+    ip_configuration {
+      name                                         = "team63-vmssnic-ip"
+      subnet_id                                    = azurerm_subnet.team63_scale.id
+      application_gateway_backend_address_pool_ids = [tolist(azurerm_application_gateway.team63_appgw.backend_address_pool)[0].id]
+    }
+  }
+
+  boot_diagnostics {
+    storage_account_uri = null
+  }
+}
+
+resource "azurerm_linux_virtual_machine_scale_set" "team63_vmss2" {
+  name                = "team63-vmss2"
+  location            = var.rgloca2
+  resource_group_name = var.rgname2
+  instances           = 2
+  source_image_id     = azurerm_shared_image_version.team63_version2.id
+  admin_username      = "team63"
+  sku                 = "Standard_B2ls_v2"
+  upgrade_mode        = "Manual"
+  user_data           = base64encode(replace(file("install.sh"), "$${db_pswd}", var.db_pswd))
+
+  plan {
+    publisher = "resf"
+    product   = "rockylinux-x86_64"
+    name      = "9-lvm"
+  }
+
+  admin_ssh_key {
+    username   = "team63"
+    public_key = file("id_rsa.pub")
+  }
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "StandardSSD_LRS"
+  }
+
+  network_interface {
+    name    = "team63-vmssnic2"
+    primary = true
+
+    ip_configuration {
+      name                                         = "team63-vmssnic2-ip"
+      subnet_id                                    = azurerm_subnet.team63_scale2.id
+      application_gateway_backend_address_pool_ids = [tolist(azurerm_application_gateway.team63_appgw2.backend_address_pool)[0].id]
+    }
+  }
+
+  boot_diagnostics {
+    storage_account_uri = null
+  }
+}

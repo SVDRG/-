@@ -1,0 +1,9 @@
+resource "azurerm_network_interface_security_group_association" "team63_bas2_http2" {
+  network_interface_id = azurerm_network_interface.team63_bas2_nic.id
+  network_security_group_id = azurerm_network_security_group.team63_nsg_http2.id
+}
+
+resource "azurerm_subnet_network_security_group_association" "team63_vmss_subnet_assoc2" {
+  subnet_id                 = azurerm_subnet.team63_scale2.id
+  network_security_group_id = azurerm_network_security_group.team63_nsg_http2.id
+}

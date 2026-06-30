@@ -35,3 +35,15 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+**/.terraform/*
+
+id_rsa
+id_rsa.pub
+*.pem
+*.key
+
+.DS_Store
+Thumbs.db
+
+key.sh

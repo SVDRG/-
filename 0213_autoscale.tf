@@ -1,0 +1,115 @@
+resource "azurerm_monitor_autoscale_setting" "team63_auto" {
+  name                = "team63-auto"
+  location            = var.rgloca
+  resource_group_name = var.rgname
+  target_resource_id  = azurerm_linux_virtual_machine_scale_set.team63_vmss.id
+  enabled             = true
+
+  profile {
+    name = "team63-profile"
+
+    capacity {
+      default = 2
+      minimum = 1
+      maximum = 6
+    }
+
+    rule {
+      metric_trigger {
+        metric_name        = "Percentage CPU"
+        metric_resource_id = azurerm_linux_virtual_machine_scale_set.team63_vmss.id
+        time_grain         = "PT1M"
+        statistic          = "Average"
+        time_window        = "PT5M"
+        time_aggregation   = "Average"
+        operator           = "GreaterThanOrEqual"
+        threshold          = 80
+      }
+
+      scale_action {
+        direction = "Increase"
+        type      = "ChangeCount"
+        value     = "1"
+        cooldown  = "PT5M"
+      }
+    }
+
+    rule {
+      metric_trigger {
+        metric_name        = "Percentage CPU"
+        metric_resource_id = azurerm_linux_virtual_machine_scale_set.team63_vmss.id
+        time_grain         = "PT1M"
+        statistic          = "Average"
+        time_window        = "PT5M"
+        time_aggregation   = "Average"
+        operator           = "LessThanOrEqual"
+        threshold          = 20
+      }
+
+      scale_action {
+        direction = "Decrease"
+        type      = "ChangeCount"
+        value     = "1"
+        cooldown  = "PT5M"
+      }
+    }
+  }
+}
+
+resource "azurerm_monitor_autoscale_setting" "team63_auto2" {
+  name                = "team63-auto2"
+  location            = var.rgloca2
+  resource_group_name = var.rgname2
+  target_resource_id  = azurerm_linux_virtual_machine_scale_set.team63_vmss2.id
+  enabled             = true
+
+  profile {
+    name = "team63-profile2"
+
+    capacity {
+      default = 2
+      minimum = 1
+      maximum = 6
+    }
+
+    rule {
+      metric_trigger {
+        metric_name        = "Percentage CPU"
+        metric_resource_id = azurerm_linux_virtual_machine_scale_set.team63_vmss2.id
+        time_grain         = "PT1M"
+        statistic          = "Average"
+        time_window        = "PT5M"
+        time_aggregation   = "Average"
+        operator           = "GreaterThanOrEqual"
+        threshold          = 80
+      }
+
+      scale_action {
+        direction = "Increase"
+        type      = "ChangeCount"
+        value     = "1"
+        cooldown  = "PT5M"
+      }
+    }
+
+    rule {
+      metric_trigger {
+        metric_name        = "Percentage CPU"
+        metric_resource_id = azurerm_linux_virtual_machine_scale_set.team63_vmss2.id
+        time_grain         = "PT1M"
+        statistic          = "Average"
+        time_window        = "PT5M"
+        time_aggregation   = "Average"
+        operator           = "LessThanOrEqual"
+        threshold          = 20
+      }
+
+      scale_action {
+        direction = "Decrease"
+        type      = "ChangeCount"
+        value     = "1"
+        cooldown  = "PT5M"
+      }
+    }
+  }
+}
